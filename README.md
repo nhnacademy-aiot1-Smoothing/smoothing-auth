@@ -1,2 +1,0 @@
-# smoothing-auth
-smoothing auth
