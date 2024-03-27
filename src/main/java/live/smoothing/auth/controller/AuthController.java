@@ -22,14 +22,16 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<ReissueResponse> reissueToken(@RequestBody RefreshTokenRequest request,
-                                                        @RequestHeader("X-USER-Id") String userId) {
+                                                        @RequestHeader("X-USER-ID") String userId) {
 
         return new ResponseEntity<>(refreshTokenService.reissue(userId, request.getRefreshToken()), HttpStatus.OK);
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("X-USER-ID") String userId) {
-//        refreshTokenService.delete(userId, );
+    public ResponseEntity<Void> logout(@RequestBody RefreshTokenRequest request,
+                                       @RequestHeader("X-USER-ID") String userId) {
+
+        refreshTokenService.delete(userId, request.getRefreshToken());
 
         return ResponseEntity.ok().build();
     }
