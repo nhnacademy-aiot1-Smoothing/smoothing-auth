@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     private String userId;
     private String userPassword;
     private List<String> userAuth;
