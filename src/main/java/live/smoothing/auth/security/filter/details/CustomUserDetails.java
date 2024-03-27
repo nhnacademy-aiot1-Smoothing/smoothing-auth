@@ -2,6 +2,7 @@ package live.smoothing.auth.security.filter.details;
 
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.dto.SimpleUserResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private User user;
 

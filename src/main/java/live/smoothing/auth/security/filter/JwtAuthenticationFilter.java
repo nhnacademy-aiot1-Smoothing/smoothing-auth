@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import live.smoothing.auth.properties.JwtProperties;
 import live.smoothing.auth.security.filter.details.CustomUserDetails;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
+import live.smoothing.auth.token.entity.RefreshToken;
+import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.user.dto.LoginRequest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,12 +28,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper;
     private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper, JwtProperties jwtProperties) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper, JwtProperties jwtProperties, RefreshTokenRepository refreshTokenRepository) {
 
         this.authenticationManager = authenticationManager;
         this.objectMapper = objectMapper;
         this.jwtProperties = jwtProperties;
+        this.refreshTokenRepository = refreshTokenRepository;
 
         setFilterProcessesUrl(jwtProperties.getLoginUrl());
     }
@@ -70,5 +74,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrintWriter printWriter = response.getWriter();
         printWriter.write(result);
         printWriter.close();
+        refreshTokenRepository.save(new RefreshToken(userDetails.getUsername(),refreshToken));
     }
 }
