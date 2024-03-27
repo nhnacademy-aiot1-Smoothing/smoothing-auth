@@ -2,8 +2,6 @@ package live.smoothing.auth.token.repository;
 
 import live.smoothing.auth.token.entity.RefreshToken;
 
-import java.util.Optional;
-
 public interface RefreshTokenRepository {
 
     void save(RefreshToken refreshToken);
