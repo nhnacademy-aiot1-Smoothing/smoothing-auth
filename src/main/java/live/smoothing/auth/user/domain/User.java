@@ -9,6 +9,7 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 public class User {
+
     private String userId;
     private String userPassword;
     private Collection<GrantedAuthority> authorities;

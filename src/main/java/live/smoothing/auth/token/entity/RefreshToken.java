@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RefreshToken {
+
     private String userId;
     private String refreshToken;
 }
