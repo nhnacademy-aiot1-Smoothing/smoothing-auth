@@ -1,0 +1,7 @@
+DELETE http://localhost:8082/api/auth/logout
+X-USER_ID:userId
+Content-Type: application/json
+
+{
+  "refreshToken" : "refreshToken"
+}
