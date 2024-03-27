@@ -1,11 +1,10 @@
 package live.smoothing.auth.token.service;
 
+import live.smoothing.auth.token.dto.ReissueResponse;
+
 public interface RefreshTokenService {
-
-    boolean existRefreshToken(String userId, String refreshToken);
-
-    void save(String userId, String refreshToken);
 
     void delete(String userId, String refreshToken);
 
+    ReissueResponse reissue(String userId, String refreshToken);
 }
