@@ -2,6 +2,7 @@ package live.smoothing.auth.token.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import live.smoothing.auth.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Calendar;
@@ -9,17 +10,13 @@ import java.util.Date;
 import java.util.List;
 
 public class JwtTokenUtil {
-
     private static String secret;
-
     @Value("${jwt.secret}")
-    public void setSecret(String secret) {
-
-        this.secret = secret;
+    public void setSecret(JwtProperties jwtProperties){
+        this.secret = jwtProperties.getSecret();
     }
 
-    public static String createToken(String userId, List<String> roles, Integer expireIn) {
-
+    public static String createToken(String userId, List<String> roles, Integer expireIn){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, expireIn);
         return Jwts.builder()

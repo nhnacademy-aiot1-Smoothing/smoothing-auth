@@ -27,7 +27,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     @Override
     public void deleteByUserIdAndRefreshToken(String userId, String refreshToken) {
 
-        redisTemplate.opsForSet().remove(userId,refreshToken);
+        redisTemplate.opsForSet().remove(userId, refreshToken);
     }
 
 }

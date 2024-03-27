@@ -14,6 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
+
     private final RedisProperties redisProperties;
     @Value("${redis.dbIndex}")
     private Integer dbIndex;
