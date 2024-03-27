@@ -16,6 +16,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void delete(String userId, String refreshToken) {
 
+        if (!refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)) {
+            throw new RuntimeException("일치하는 값이 없습니다.");
+        }
+
         refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
     }
 
