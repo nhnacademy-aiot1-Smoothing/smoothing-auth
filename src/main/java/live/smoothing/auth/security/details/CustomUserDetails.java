@@ -1,4 +1,4 @@
-package live.smoothing.auth.security.filter.details;
+package live.smoothing.auth.security.details;
 
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.dto.SimpleUserResponse;

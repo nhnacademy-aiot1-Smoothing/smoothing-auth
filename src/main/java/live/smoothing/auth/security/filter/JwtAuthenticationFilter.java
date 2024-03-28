@@ -1,8 +1,9 @@
 package live.smoothing.auth.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import live.smoothing.auth.exception.ErrorException;
 import live.smoothing.auth.properties.JwtProperties;
-import live.smoothing.auth.security.filter.details.CustomUserDetails;
+import live.smoothing.auth.security.details.CustomUserDetails;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.entity.RefreshToken;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ErrorException(400, IllegalArgumentException.class,"Body 오류",request.getServletPath());
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserId(), loginRequest.getUserPassword());
         return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
