@@ -1,12 +1,14 @@
-name: Spring-Boot TEST
+name: Maven Build
 
 on:
   push:
     branches:
     - main
+    - develop
   pull_request:
     branches:
     - main
+    - develop
 
 jobs:
   build:
