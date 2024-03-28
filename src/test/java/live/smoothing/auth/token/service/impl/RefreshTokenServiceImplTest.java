@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -45,8 +45,19 @@ class RefreshTokenServiceImplTest {
         when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
 
         ReissueResponse response = refreshTokenService.reissue(userId, refreshToken);
+
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String[] chunks = response.getAccessToken().split("\\.");
+        String payload = new String(decoder.decode(chunks[1]));
+        int userIdIndex = payload.indexOf("\"userId\"");
+        int colonIndex = payload.indexOf(":", userIdIndex);
+        int commaIndex = payload.indexOf(",", colonIndex);
+        int endIndex = payload.indexOf("}", colonIndex);
+        int endOfValueIndex = (commaIndex != -1 && commaIndex < endIndex) ? commaIndex : endIndex;
+        String result = payload.substring(colonIndex + 2, endOfValueIndex - 1);
+
+        assertEquals(userId, result);
         assertEquals("Bearer", response.getTokenType());
-        response.getAccessToken();
     }
 
     @Test
