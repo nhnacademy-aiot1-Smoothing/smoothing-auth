@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import live.smoothing.auth.adapter.UserAdapter;
 import live.smoothing.auth.properties.JwtProperties;
 import live.smoothing.auth.security.filter.JwtAuthenticationFilter;
-import live.smoothing.auth.security.filter.details.CustomUserDetailsService;
+import live.smoothing.auth.security.details.CustomUserDetailsService;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final JwtProperties jwtProperties;
-//    private final UserAdapter userAdapter;
+    private final UserAdapter userAdapter;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
@@ -60,8 +59,7 @@ public class SecurityConfig {
     @Bean
     public CustomUserDetailsService customUserDetailsService(){
 
-//        return new CustomUserDetailsService(userAdapter);
-        return new CustomUserDetailsService();
+        return new CustomUserDetailsService(userAdapter);
 
     }
 
