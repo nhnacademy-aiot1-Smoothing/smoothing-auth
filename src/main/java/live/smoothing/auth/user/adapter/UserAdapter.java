@@ -1,4 +1,4 @@
-package live.smoothing.auth.adapter;
+package live.smoothing.auth.user.adapter;
 
 import live.smoothing.auth.user.dto.SimpleUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;

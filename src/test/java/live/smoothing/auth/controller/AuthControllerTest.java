@@ -3,11 +3,14 @@ package live.smoothing.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import live.smoothing.auth.password.dto.PasswordDto;
 import live.smoothing.auth.password.service.PasswordEncodingService;
+import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.entity.RefreshToken;
-import live.smoothing.auth.token.service.RefreshTokenService;
+import live.smoothing.auth.token.service.TokenService;
+import live.smoothing.auth.user.domain.User;
+import live.smoothing.auth.user.dto.LoginRequest;
+import live.smoothing.auth.user.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,7 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest {
 
     @MockBean
-    private RefreshTokenService refreshTokenService;
+    private UserService userService;
+
+    @MockBean
+    private TokenService tokenService;
 
     @MockBean
     private PasswordEncodingService passwordEncodingService;
@@ -53,7 +59,7 @@ class AuthControllerTest {
         reissueResponse.setAccessToken("asddfljsalfkjdslfjlasdkflasdkfl");
         reissueResponse.setTokenType("Bearer");
 
-        when(refreshTokenService.reissue(eq(userId), eq(refreshToken.getRefreshToken()))).thenReturn(reissueResponse);
+        when(tokenService.reissue(eq(userId), eq(refreshToken.getRefreshToken()))).thenReturn(reissueResponse);
 
         mockMvc.perform(post("/api/auth/refresh").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(refreshToken)).header("X-USER-ID", userId)).andExpect(status().isOk()).andDo(print()).andExpect(content().bytes(objectMapper.writeValueAsBytes(reissueResponse)));
     }
@@ -68,7 +74,7 @@ class AuthControllerTest {
                         .header("X-USER-ID", userId))
                 .andExpect(status().isOk());
 
-        verify(refreshTokenService).delete(userId, refreshToken.getRefreshToken());
+        verify(tokenService).delete(userId, refreshToken.getRefreshToken());
     }
 
     @Test
@@ -86,5 +92,20 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.password").value(encodedPassword.getPassword()));
+    }
+
+    @Test
+    void login() throws Exception {
+
+        LoginTokenResponse response = new LoginTokenResponse("access","refresh","type");
+        User user = new User();
+        Mockito.when(userService.login(any(LoginRequest.class))).thenReturn(user);
+        Mockito.when(tokenService.issue(user)).thenReturn(response);
+
+        mockMvc.perform(post("/api/auth/login")
+                .content(new ObjectMapper().writeValueAsBytes(new LoginRequest()))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new ObjectMapper().writeValueAsBytes(response)));
     }
 }
