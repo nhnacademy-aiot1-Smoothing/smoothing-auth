@@ -14,3 +14,12 @@ Content-Type: application/json
 {
   "refreshToken" : "refreshToken"
 }
+
+###
+POST http://localhost:8080/api/auth/refresh
+X-USER-ID:test
+Content-Type: application/json
+
+{
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ0ZXN0Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTcxMTUyNTIwNSwiZXhwIjoxNzExNTI5NTI1fQ.80khxMpXI1yLUgLdMalVAY3wsUmO88HjAjMfiqJAy0A"
+}
