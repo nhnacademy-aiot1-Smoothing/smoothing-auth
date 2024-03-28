@@ -51,5 +51,13 @@ class AuthControllerTest {
     @Test
     void logout() throws Exception {
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(delete("/api/auth//logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshToken))
+                        .header("X-USER-ID", userId))
+                .andExpect(status().isOk());
+
+        verify(refreshTokenService).delete(userId, refreshToken.getRefreshToken());
     }
 }
