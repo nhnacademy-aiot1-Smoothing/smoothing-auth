@@ -22,7 +22,7 @@ public class JwtTokenUtil {
     public static String createToken(String userId, List<String> roles, Integer expireIn){
         System.out.println(secret);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, expireIn);
+        calendar.add(Calendar.SECOND, expireIn*60);
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("roles", roles)
