@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -48,7 +50,15 @@ class AuthControllerTest {
     }
 
     @Test
-    void logout() {
+    void logout() throws Exception {
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(delete("/api/auth//logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshToken))
+                        .header("X-USER-ID", userId))
+                .andExpect(status().isOk());
+
+        verify(refreshTokenService).delete(userId, refreshToken.getRefreshToken());
     }
 }
