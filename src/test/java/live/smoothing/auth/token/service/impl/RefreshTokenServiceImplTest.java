@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RefreshTokenServiceImplTest {
@@ -41,7 +42,7 @@ class RefreshTokenServiceImplTest {
     @Test
     void reissue_existByUserIdAndRefreshToken() {
 
-        Mockito.when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
+        when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
 
         ReissueResponse response = refreshTokenService.reissue(userId, refreshToken);
         assertEquals("Bearer", response.getTokenType());
@@ -51,11 +52,34 @@ class RefreshTokenServiceImplTest {
     @Test
     void reissue_notExistByUserIdAndRefreshToken() {
 
-        Mockito.when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(false);
+        when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(false);
 
         Assertions.assertThrows(RuntimeException.class, () -> {
             refreshTokenService.reissue(userId, refreshToken);
         });
+    }
+
+    @Test
+    void delete_existByUserIdAndRefreshToken() {
+
+        when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
+
+        refreshTokenService.delete(userId, refreshToken);
+
+        verify(refreshTokenRepository).deleteByUserIdAndRefreshToken(userId, refreshToken);
+
+    }
+
+    @Test
+    void delete_notExistByUserIdAndRefreshToken() {
+
+        when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(false);
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            refreshTokenService.delete(userId, refreshToken);
+        });
+
+        verify(refreshTokenRepository, never()).deleteByUserIdAndRefreshToken(userId, refreshToken);
     }
 
 }
