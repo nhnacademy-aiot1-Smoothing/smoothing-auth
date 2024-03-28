@@ -12,16 +12,19 @@ import java.util.List;
 
 @Component
 public class JwtTokenUtil {
+
     private static String secret;
 
     @Autowired
-    public void setSecret(JwtProperties jwtProperties){
+    public void setSecret(JwtProperties jwtProperties) {
+
         this.secret = jwtProperties.getSecret();
     }
 
-    public static String createToken(String userId, List<String> roles, Integer expireIn){
+    public static String createToken(String userId, List<String> roles, Integer expireIn) {
+
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, expireIn*60);
+        calendar.add(Calendar.SECOND, expireIn * 60);
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("roles", roles)

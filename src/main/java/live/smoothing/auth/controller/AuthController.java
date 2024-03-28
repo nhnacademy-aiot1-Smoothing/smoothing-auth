@@ -1,5 +1,7 @@
 package live.smoothing.auth.controller;
 
+import live.smoothing.auth.password.dto.PasswordDto;
+import live.smoothing.auth.password.service.PasswordEncodingService;
 import live.smoothing.auth.token.dto.RefreshTokenRequest;
 import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.service.RefreshTokenService;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final RefreshTokenService refreshTokenService;
+    private final PasswordEncodingService passwordEncodingService;
 
     @PostMapping("/refresh")
     public ResponseEntity<ReissueResponse> reissueToken(@RequestBody RefreshTokenRequest request,
@@ -34,5 +36,11 @@ public class AuthController {
         refreshTokenService.delete(userId, request.getRefreshToken());
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/encode")
+    public ResponseEntity<PasswordDto> encodePassword(@RequestBody PasswordDto originalPassword) {
+
+        return new ResponseEntity<>(passwordEncodingService.encodePassword(originalPassword), HttpStatus.OK);
     }
 }

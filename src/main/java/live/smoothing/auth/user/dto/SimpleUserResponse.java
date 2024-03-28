@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class SimpleUserResponse {
+
     private String userId;
     private String userPassword;
     private List<String> userAuth;
