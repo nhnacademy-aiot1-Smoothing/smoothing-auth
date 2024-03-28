@@ -20,7 +20,7 @@ public class JwtTokenUtil {
     }
 
     public static String createToken(String userId, List<String> roles, Integer expireIn){
-        System.out.println(secret);
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, expireIn);
         return Jwts.builder()
