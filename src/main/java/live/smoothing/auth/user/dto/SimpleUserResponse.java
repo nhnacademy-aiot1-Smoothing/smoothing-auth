@@ -20,7 +20,7 @@ public class SimpleUserResponse {
         return new User(user.userId, user.userPassword, auths);
     }
 
-    static class InnerUser {
+    public static class InnerUser {
         private String userId;
         private String userPassword;
     }

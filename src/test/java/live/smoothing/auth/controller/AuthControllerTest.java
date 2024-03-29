@@ -94,18 +94,18 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.password").value(encodedPassword.getPassword()));
     }
 
-//    @Test
-//    void login() throws Exception {
-//
-//        LoginTokenResponse response = new LoginTokenResponse("access","refresh","type");
-//        User user = new User();
-//        Mockito.when(userService.login(any(LoginRequest.class))).thenReturn(user);
-//        Mockito.when(tokenService.issue(user)).thenReturn(response);
-//
-//        mockMvc.perform(post("/api/auth/login")
-//                .content(new ObjectMapper().writeValueAsBytes(new LoginRequest()))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().bytes(new ObjectMapper().writeValueAsBytes(response)));
-//    }
+    @Test
+    void login() throws Exception {
+
+        LoginTokenResponse response = new LoginTokenResponse("access","refresh","type");
+        User user = new User();
+        Mockito.when(userService.getUser(any())).thenReturn(user);
+        Mockito.when(tokenService.issue(user)).thenReturn(response);
+
+        mockMvc.perform(post("/api/auth/login")
+                .content(new ObjectMapper().writeValueAsBytes(new LoginRequest()))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new ObjectMapper().writeValueAsBytes(response)));
+    }
 }

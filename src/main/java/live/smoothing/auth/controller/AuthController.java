@@ -28,9 +28,10 @@ public class AuthController {
     private final PasswordEncodingService passwordEncodingService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<LoginTokenResponse> login(@RequestBody LoginRequest loginRequest) {
 
         User user = userService.getUser(loginRequest.getUserId());
+        userService.login(loginRequest, user);
         return ResponseEntity.ok(tokenService.issue(user));
     }
 
