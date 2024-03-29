@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ErrorController {
 
-    @ExceptionHandler({ErrorException.class})
+    @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<ErrorResponse> error(HttpServletRequest request, ErrorException e){
 
         return ResponseEntity.status(e.getStatus())

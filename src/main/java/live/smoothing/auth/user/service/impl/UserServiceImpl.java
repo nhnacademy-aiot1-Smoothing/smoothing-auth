@@ -20,19 +20,24 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User login(LoginRequest request) {
+    public void login(LoginRequest request, User user) {
+
+        if (!user.getUserPassword().equals(passwordEncoder.encode(request.getUserPassword()))) {
+            throw new LoginFailException("비밀번호 틀림");
+        }
+    }
+
+    @Override
+    public User getUser(String userId) {
 
         Optional<SimpleUserResponse> userResponse;
         try {
-            userResponse = userAdapter.getSimpleUser(request.getUserId());
+            userResponse = userAdapter.getSimpleUser(userId);
         } catch (Exception e) {
             throw new LoginFailException("유저 서버 오류");
         }
         if (userResponse.isEmpty()) {
             throw new LoginFailException("유저 정보 없음");
-        }
-        if (!userResponse.get().getUserPassword().equals(passwordEncoder.encode(request.getUserPassword()))) {
-            throw new LoginFailException("비밀번호 틀림");
         }
         return userResponse.get().toEntity();
     }

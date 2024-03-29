@@ -7,6 +7,7 @@ import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.user.domain.User;
+import live.smoothing.auth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class TokenServiceImpl implements TokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
+    private final UserService userService;
 
     @Override
     public LoginTokenResponse issue(User user) {
@@ -46,8 +48,10 @@ public class TokenServiceImpl implements TokenService {
             throw new RuntimeException();
         }
 
+        User user = userService.getUser(userId);
+
         ReissueResponse response = new ReissueResponse();
-        response.setAccessToken(JwtTokenUtil.createToken(userId, null, 1));
+        response.setAccessToken(JwtTokenUtil.createToken(userId, user.getUserAuth(), jwtProperties.getAccessTokenExpirationTime()));
         response.setTokenType("Bearer");
 
         return response;

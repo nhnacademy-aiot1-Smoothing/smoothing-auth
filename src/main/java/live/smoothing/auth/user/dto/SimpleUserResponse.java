@@ -12,11 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 public class SimpleUserResponse {
 
-    private String userId;
-    private String userPassword;
-    private List<String> userAuth;
+    private InnerUser user;
+    private List<String> auths;
 
-    public User toEntity(){
-        return new User(userId,userPassword,userAuth);
+    public User toEntity() {
+
+        return new User(user.userId, user.userPassword, auths);
+    }
+
+    static class InnerUser {
+        private String userId;
+        private String userPassword;
     }
 }

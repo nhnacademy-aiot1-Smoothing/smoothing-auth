@@ -9,6 +9,7 @@ import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.user.domain.User;
+import live.smoothing.auth.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,17 @@ class TokenServiceImplTest {
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private TokenServiceImpl tokenService;
 
     private final String userId = "test";
 
     private final String refreshToken = "test12";
+
+    private final User user = new User(userId, "1234", List.of("ROLE_TEST"));
 
     @BeforeAll
     static void beforeAll() {
@@ -52,6 +58,7 @@ class TokenServiceImplTest {
     void reissue_existByUserIdAndRefreshToken() {
 
         when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
+        when(userService.getUser(userId)).thenReturn(user);
 
         ReissueResponse response = tokenService.reissue(userId, refreshToken);
 
@@ -105,13 +112,13 @@ class TokenServiceImplTest {
     @Test
     void issue() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        User input = new User("test","1234", List.of("test"));
+        User input = new User("test", "1234", List.of("test"));
 
         Mockito.when(jwtProperties.getAccessTokenExpirationTime()).thenReturn(100);
         Mockito.when(jwtProperties.getRefreshTokenExpirationTime()).thenReturn(200);
         LoginTokenResponse output = tokenService.issue(input);
         JsonNode jsonNode = objectMapper.readTree(Base64.getDecoder().decode(output.getAccessToken().split("\\.")[1]));
 
-        assertEquals(input.getUserId(),jsonNode.get("userId").asText());
+        assertEquals(input.getUserId(), jsonNode.get("userId").asText());
     }
 }
