@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @FeignClient(value = "user-service",path = "/api/user")
 public interface UserAdapter {
-    @GetMapping("/simples")
+    @GetMapping("/login")
     Optional<SimpleUserResponse> getSimpleUser(@RequestHeader("X-USER-ID") String userId);
 }

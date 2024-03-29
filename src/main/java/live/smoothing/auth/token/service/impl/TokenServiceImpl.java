@@ -3,10 +3,12 @@ package live.smoothing.auth.token.service.impl;
 import live.smoothing.auth.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
+import live.smoothing.auth.token.exeption.RefreshTokenNotExist;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.user.domain.User;
+import live.smoothing.auth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class TokenServiceImpl implements TokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
+    private final UserService userService;
 
     @Override
     public LoginTokenResponse issue(User user) {
@@ -33,7 +36,7 @@ public class TokenServiceImpl implements TokenService {
     public void delete(String userId, String refreshToken) {
 
         if (!refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)) {
-            throw new RuntimeException("일치하는 값이 없습니다.");
+            throw new RefreshTokenNotExist();
         }
 
         refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
@@ -43,11 +46,13 @@ public class TokenServiceImpl implements TokenService {
     public ReissueResponse reissue(String userId, String refreshToken) {
 
         if (!refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)) {
-            throw new RuntimeException();
+            throw new RefreshTokenNotExist();
         }
 
+        User user = userService.getUser(userId);
+
         ReissueResponse response = new ReissueResponse();
-        response.setAccessToken(JwtTokenUtil.createToken(userId, null, 1));
+        response.setAccessToken(JwtTokenUtil.createToken(userId, user.getUserAuth(), jwtProperties.getAccessTokenExpirationTime()));
         response.setTokenType("Bearer");
 
         return response;

@@ -99,7 +99,7 @@ class AuthControllerTest {
 
         LoginTokenResponse response = new LoginTokenResponse("access","refresh","type");
         User user = new User();
-        Mockito.when(userService.login(any(LoginRequest.class))).thenReturn(user);
+        Mockito.when(userService.getUser(any())).thenReturn(user);
         Mockito.when(tokenService.issue(user)).thenReturn(response);
 
         mockMvc.perform(post("/api/auth/login")
