@@ -16,10 +16,12 @@ public class SimpleUserResponse {
     private List<String> auths;
 
     public User toEntity() {
-
         return new User(user.userId, user.userPassword, auths);
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class InnerUser {
         private String userId;
         private String userPassword;

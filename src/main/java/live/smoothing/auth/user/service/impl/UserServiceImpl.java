@@ -23,8 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void login(LoginRequest request, User user) {
-
-        if (!user.getUserPassword().equals(passwordEncoder.encode(request.getUserPassword()))) {
+        if (!passwordEncoder.matches(request.getUserPassword(), user.getUserPassword())) {
             throw new PasswordNotValid();
         }
     }
