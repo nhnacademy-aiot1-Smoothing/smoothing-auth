@@ -1,6 +1,7 @@
 package live.smoothing.auth.controller;
 
-import live.smoothing.auth.password.dto.PasswordDto;
+import live.smoothing.auth.password.dto.PasswordEncodingRequest;
+import live.smoothing.auth.password.dto.PasswordEncodingResponse;
 import live.smoothing.auth.password.service.PasswordEncodingService;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.RefreshTokenRequest;
@@ -87,7 +88,7 @@ public class AuthController {
      * @author 김지윤
      */
     @PostMapping("/encode")
-    public ResponseEntity<PasswordDto> encodePassword(@RequestBody PasswordDto originalPassword) {
+    public ResponseEntity<PasswordEncodingResponse> encodePassword(@RequestBody PasswordEncodingRequest originalPassword) {
 
         return new ResponseEntity<>(passwordEncodingService.encodePassword(originalPassword), HttpStatus.OK);
     }

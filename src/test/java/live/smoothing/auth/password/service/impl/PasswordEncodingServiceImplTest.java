@@ -1,7 +1,7 @@
 package live.smoothing.auth.password.service.impl;
 
-import live.smoothing.auth.password.dto.PasswordDto;
-import live.smoothing.auth.password.service.PasswordEncodingService;
+import live.smoothing.auth.password.dto.PasswordEncodingRequest;
+import live.smoothing.auth.password.dto.PasswordEncodingResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,8 +27,8 @@ class PasswordEncodingServiceImplTest {
 
         when(passwordEncoder.encode(originalPassword)).thenReturn(encodedPassword);
 
-        PasswordDto originalPasswordDto = new PasswordDto(originalPassword);
-        PasswordDto encodedPasswordDto = passwordEncodingService.encodePassword(originalPasswordDto);
+        PasswordEncodingRequest originalPasswordDto = new PasswordEncodingRequest(originalPassword);
+        PasswordEncodingResponse encodedPasswordDto = passwordEncodingService.encodePassword(originalPasswordDto);
 
         assertEquals(encodedPassword, encodedPasswordDto.getPassword());
     }
