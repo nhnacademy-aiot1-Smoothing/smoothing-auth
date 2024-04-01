@@ -11,6 +11,11 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * Redis 설정 클래스
+ *
+ * @author 김지윤, 우혜승, 하지현
+ */
 @RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
@@ -19,6 +24,12 @@ public class RedisConfig {
     @Value("${redis.dbIndex}")
     private Integer dbIndex;
 
+    /**
+     * Redis Connection 설정하는 Bean
+     *
+     * @return Redis Connection 설정이 들어간 Factory
+     * @author 김지윤, 우혜승, 하지현
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
 
@@ -30,6 +41,13 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
+    /**
+     * Redis에 key, value 등과 관련된 연산을 하기 위해 설정하는 Bean
+     * Redis의 key와 value를 다룰 수 있음
+     *
+     * @return Redis 연산을 수행하기 위한 RedisTemplate 객체
+     * @author 김지윤, 우혜승, 하지현
+     */
     @Bean
     public RedisTemplate<String, String> redisTemplate() {
 

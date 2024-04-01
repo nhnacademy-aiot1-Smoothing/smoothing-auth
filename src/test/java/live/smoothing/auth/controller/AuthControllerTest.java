@@ -62,7 +62,13 @@ class AuthControllerTest {
 
         when(tokenService.reissue(eq(userId), eq(refreshToken.getRefreshToken()))).thenReturn(reissueResponse);
 
-        mockMvc.perform(post("/api/auth/refresh").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(refreshToken)).header("X-USER-ID", userId)).andExpect(status().isOk()).andDo(print()).andExpect(content().bytes(objectMapper.writeValueAsBytes(reissueResponse)));
+        mockMvc.perform(post("/api/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshToken))
+                        .header("X-USER-ID", userId))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().bytes(objectMapper.writeValueAsBytes(reissueResponse)));
     }
 
     @Test
