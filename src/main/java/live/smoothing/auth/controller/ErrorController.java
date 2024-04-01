@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
-
+/**
+ * Error 처리를 위한 컨트롤러 클래스
+ *
+ * @author 우혜승
+ */
 @RestControllerAdvice
 public class ErrorController {
 
