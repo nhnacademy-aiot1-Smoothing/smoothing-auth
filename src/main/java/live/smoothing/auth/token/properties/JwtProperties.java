@@ -1,4 +1,4 @@
-package live.smoothing.auth.properties;
+package live.smoothing.auth.token.properties;
 
 import lombok.Getter;
 import lombok.Setter;
