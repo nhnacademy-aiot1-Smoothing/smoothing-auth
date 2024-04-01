@@ -1,6 +1,7 @@
 package live.smoothing.auth.password.service.impl;
 
-import live.smoothing.auth.password.dto.PasswordDto;
+import live.smoothing.auth.password.dto.PasswordEncodingRequest;
+import live.smoothing.auth.password.dto.PasswordEncodingResponse;
 import live.smoothing.auth.password.service.PasswordEncodingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +22,10 @@ public class PasswordEncodingServiceImpl implements PasswordEncodingService {
      * {@inheritDoc}
      */
     @Override
-    public PasswordDto encodePassword(PasswordDto originalPassword) {
+    public PasswordEncodingResponse encodePassword(PasswordEncodingRequest originalPassword) {
 
         String encodedPassword = passwordEncoder.encode(originalPassword.getPassword());
 
-        return new PasswordDto(encodedPassword);
+        return new PasswordEncodingResponse(encodedPassword);
     }
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 비밀번호 암호화를 위한 DTO
+ * 비밀번호 암호화를 요청하는 DTO
  *
  * @author 김지윤
  */
@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordDto {
+public class PasswordEncodingRequest {
+
     private String password;
 }
