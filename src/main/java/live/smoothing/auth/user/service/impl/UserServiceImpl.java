@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * 서비스 클래스의 구현체
+ *
+ * @author 우혜승
+ */
 @Service("userService")
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -21,6 +26,9 @@ public class UserServiceImpl implements UserService {
     private final UserAdapter userAdapter;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login(LoginRequest request, User user) {
         if (!passwordEncoder.matches(request.getUserPassword(), user.getUserPassword())) {
@@ -28,6 +36,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser(String userId) {
 
