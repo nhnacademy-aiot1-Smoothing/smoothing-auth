@@ -1,9 +1,9 @@
 package live.smoothing.auth.token.service.impl;
 
-import live.smoothing.auth.properties.JwtProperties;
+import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
-import live.smoothing.auth.token.exeption.RefreshTokenNotExist;
+import live.smoothing.auth.token.exception.RefreshTokenNotExist;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.token.util.JwtTokenUtil;

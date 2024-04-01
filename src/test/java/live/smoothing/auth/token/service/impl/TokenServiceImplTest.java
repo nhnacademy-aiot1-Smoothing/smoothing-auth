@@ -1,9 +1,8 @@
 package live.smoothing.auth.token.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import live.smoothing.auth.properties.JwtProperties;
+import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;

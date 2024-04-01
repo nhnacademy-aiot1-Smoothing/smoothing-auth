@@ -1,4 +1,4 @@
-package live.smoothing.auth.token.exeption;
+package live.smoothing.auth.token.exception;
 
 import live.smoothing.common.exception.CommonException;
 import org.springframework.http.HttpStatus;

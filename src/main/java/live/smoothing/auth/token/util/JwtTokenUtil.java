@@ -2,7 +2,7 @@ package live.smoothing.auth.token.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import live.smoothing.auth.properties.JwtProperties;
+import live.smoothing.auth.token.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
