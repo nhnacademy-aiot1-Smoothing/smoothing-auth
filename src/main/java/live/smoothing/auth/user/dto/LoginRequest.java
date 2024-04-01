@@ -4,6 +4,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 로그인 요청을 위한 DTO
+ *
+ * @author 우혜승
+ */
 @Getter
 @Setter
 @NoArgsConstructor
