@@ -2,6 +2,7 @@ package live.smoothing.auth.user.adapter;
 
 import live.smoothing.auth.user.dto.SimpleUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -23,5 +24,5 @@ public interface UserAdapter {
      * @author 우혜승
      */
     @GetMapping("/login")
-    Optional<SimpleUserResponse> getSimpleUser(@RequestHeader("X-USER-ID") String userId);
+    ResponseEntity<SimpleUserResponse> getSimpleUser(@RequestHeader("X-USER-ID") String userId);
 }
