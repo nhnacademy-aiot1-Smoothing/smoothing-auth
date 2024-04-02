@@ -1,7 +1,8 @@
 package live.smoothing.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import live.smoothing.auth.password.dto.PasswordDto;
+import live.smoothing.auth.password.dto.PasswordEncodingRequest;
+import live.smoothing.auth.password.dto.PasswordEncodingResponse;
 import live.smoothing.auth.password.service.PasswordEncodingService;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
@@ -61,7 +62,13 @@ class AuthControllerTest {
 
         when(tokenService.reissue(eq(userId), eq(refreshToken.getRefreshToken()))).thenReturn(reissueResponse);
 
-        mockMvc.perform(post("/api/auth/refresh").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(refreshToken)).header("X-USER-ID", userId)).andExpect(status().isOk()).andDo(print()).andExpect(content().bytes(objectMapper.writeValueAsBytes(reissueResponse)));
+        mockMvc.perform(post("/api/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshToken))
+                        .header("X-USER-ID", userId))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().bytes(objectMapper.writeValueAsBytes(reissueResponse)));
     }
 
     @Test
@@ -80,10 +87,10 @@ class AuthControllerTest {
     @Test
     void encodePassword() throws Exception {
 
-        PasswordDto originalPassword = new PasswordDto("originalPassword");
-        PasswordDto encodedPassword = new PasswordDto("encodedPassword");
+        PasswordEncodingRequest originalPassword = new PasswordEncodingRequest("originalPassword");
+        PasswordEncodingResponse encodedPassword = new PasswordEncodingResponse("encodedPassword");
 
-        when(passwordEncodingService.encodePassword(any(PasswordDto.class))).thenReturn(encodedPassword);
+        when(passwordEncodingService.encodePassword(any(PasswordEncodingRequest.class))).thenReturn(encodedPassword);
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/api/auth/encode")

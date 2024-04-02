@@ -19,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -48,18 +51,18 @@ class UserServiceImplTest {
 
     @Test
     void login_validPassword() {
-
         user.setUserPassword("1234");
-        Mockito.when(passwordEncoder.encode(loginRequest.getUserPassword())).thenReturn("1234");
+
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
 
         assertDoesNotThrow(() -> userService.login(loginRequest, user));
     }
 
     @Test
     void login_inValidPassword() {
-
         user.setUserPassword("123");
-        Mockito.when(passwordEncoder.encode(loginRequest.getUserPassword())).thenReturn("1234");
+
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         assertThrows(PasswordNotValid.class, () -> userService.login(loginRequest, user));
     }
@@ -67,7 +70,7 @@ class UserServiceImplTest {
     @Test
     void getUser_serverError() {
 
-        Mockito.when(userAdapter.getSimpleUser(userId)).thenThrow(UserServerError.class);
+        when(userAdapter.getSimpleUser(userId)).thenThrow(UserServerError.class);
 
         assertThrows(UserServerError.class, ()->userService.getUser(userId));
     }
