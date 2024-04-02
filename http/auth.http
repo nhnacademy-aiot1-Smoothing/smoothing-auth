@@ -1,0 +1,33 @@
+POST http://localhost:8002/api/auth/login
+Content-Type: application/json
+
+{
+  "userId": "test",
+  "userPassword": "1234"
+}
+
+###
+DELETE http://localhost:8002/api/auth/logout
+X-USER-ID:test
+Content-Type: application/json
+
+{
+  "refreshToken" : "refreshToken"
+}
+
+###
+POST http://localhost:8002/api/auth/encode
+Content-Type: application/json
+
+{
+  "password": "12345"
+}
+
+###
+POST http://localhost:8002/api/auth/refresh
+X-USER-ID:test
+Content-Type: application/json
+
+{
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ0ZXN0Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTcxMTUyNTIwNSwiZXhwIjoxNzExNTI5NTI1fQ.80khxMpXI1yLUgLdMalVAY3wsUmO88HjAjMfiqJAy0A"
+}
