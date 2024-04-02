@@ -1,5 +1,6 @@
 package live.smoothing.auth.user.service.impl;
 
+import feign.FeignException;
 import live.smoothing.auth.user.adapter.UserAdapter;
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.dto.LoginRequest;
@@ -9,6 +10,7 @@ import live.smoothing.auth.user.exeption.UserNotFound;
 import live.smoothing.auth.user.exeption.UserServerError;
 import live.smoothing.auth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,15 +33,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String userId) {
 
-        Optional<SimpleUserResponse> userResponse;
+        ResponseEntity<SimpleUserResponse> userResponse;
         try {
             userResponse = userAdapter.getSimpleUser(userId);
         } catch (Exception e) {
+            if(e instanceof FeignException){
+                System.out.println(((FeignException) e).status());
+            }
             throw new UserServerError();
         }
-        if (userResponse.isEmpty()) {
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
             throw new UserNotFound();
         }
-        return userResponse.get().toEntity();
+        return userResponse.getBody().toEntity();
     }
 }
