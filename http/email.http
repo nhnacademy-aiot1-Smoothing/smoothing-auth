@@ -1,0 +1,16 @@
+### 인증번호 요청
+POST http://localhost:8002/api/auth/email
+Content-Type: application/json
+
+{
+  "email" : "cs.smoothing@gmail.com"
+}
+
+### 인증번호 검증
+POST http://localhost:8002/api/auth/email/verify
+Content-Type: application/json
+
+{
+  "email": "cs.smoothing@gmail.com",
+  "certificationNumber": "599604"
+}
