@@ -10,9 +10,9 @@ import live.smoothing.auth.rabbitmq.dto.MessageDTO;
 public interface MessageProducerService {
 
     /**
-     * @param messageDTO queue에 전달할 메세지를 담고 있는 객체
+     * Message Queue에 메세지를 전달하는 메서드
      *
-     * @author 김지윤
+     * @param messageDTO queue에 전달할 메세지를 담고 있는 객체
      */
     void sendMessage(MessageDTO messageDTO);
 }
