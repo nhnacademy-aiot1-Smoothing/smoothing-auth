@@ -37,24 +37,46 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
+    /**
+     * Queue 생성
+     *
+     * @return 생성된 Queue
+     */
     @Bean
     public Queue queue() {
 
         return new Queue(queueName);
     }
 
+    /**
+     * Exchange 생성
+     *
+     * @return 생성된 Exchange
+     */
     @Bean
     public DirectExchange directExchange() {
 
         return new DirectExchange(exchangeName);
     }
 
+    /**
+     * routing key로 queue를 exchange에 binding
+     *
+     * @param queue queue
+     * @param exchange exchange
+     * @return 생성된 Binding
+     */
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange) {
 
         return BindingBuilder.bind(queue).to(exchange).with(routingKey);
     }
 
+    /**
+     * Rabbit MQ와의 연결을 설정
+     *
+     * @return MQ Connection 설정이 들어간 Factory
+     */
     @Bean
     public CachingConnectionFactory connectionFactory() {
 
@@ -68,6 +90,12 @@ public class RabbitMqConfig {
         return connectionFactory;
     }
 
+    /**
+     * Rabbit MQ와의 상호 작용을 위한 template
+     *
+     * @param connectionFactory MQ Connection 설정이 들어간 Factory
+     * @return rabbitTemplate
+     */
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
 
@@ -77,6 +105,11 @@ public class RabbitMqConfig {
         return rabbitTemplate;
     }
 
+    /**
+     * Rabbit MQ 메세지를 JSON 형식으로 변환하기 위한 messageConverter
+     *
+     * @return messageConverter
+     */
     @Bean
     public MessageConverter jackson2JsonMessageConverter() {
 
