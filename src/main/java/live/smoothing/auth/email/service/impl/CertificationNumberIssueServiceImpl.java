@@ -35,10 +35,11 @@ public class CertificationNumberIssueServiceImpl implements CertificationNumberI
         String certificationNumber = certificationNumberUtil.createCertificationNumber();
         certificationNumberService.saveCertificationNumber(email, certificationNumber);
 
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setTitle("인증번호 안내 입니다.");
-        messageDTO.setEventMessage("인증번호는 " + certificationNumber + " 입니다.");
-        messageDTO.setEmail(email);
+        String title = "인증번호 안내 입니다.";
+        String eventMessage = "인증번호는 " + certificationNumber + " 입니다.";
+
+        MessageDTO messageDTO = new MessageDTO(email, title, eventMessage);
+
         messageProducerService.sendMessage(messageDTO);
 
         return new CertificationNumberResponse(certificationNumber);
