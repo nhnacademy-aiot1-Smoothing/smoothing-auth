@@ -3,6 +3,7 @@ package live.smoothing.auth.email.service.impl;
 import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.service.CertificationNumberService;
 import live.smoothing.auth.email.util.CertificationNumberUtil;
+import live.smoothing.auth.rabbitmq.service.MessageProducerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,9 @@ class CertificationNumberIssueServiceImplTest {
 
     @Mock
     private CertificationNumberService certificationNumberService;
+
+    @Mock
+    private MessageProducerService messageProducerService;
 
     @InjectMocks
     private CertificationNumberIssueServiceImpl certificationNumberIssueService;
