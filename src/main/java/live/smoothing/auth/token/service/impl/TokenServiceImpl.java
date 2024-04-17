@@ -1,5 +1,6 @@
 package live.smoothing.auth.token.service.impl;
 
+import live.smoothing.auth.token.entity.RefreshToken;
 import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
@@ -36,6 +37,8 @@ public class TokenServiceImpl implements TokenService {
 
         String refreshToken = JwtTokenUtil.createToken(user.getUserId(),
                 user.getUserAuth(), jwtProperties.getRefreshTokenExpirationTime());
+
+        refreshTokenRepository.save(new RefreshToken(user.getUserId(), refreshToken));
 
         return new LoginTokenResponse(accessToken, refreshToken, jwtProperties.getTokenPrefix());
     }
