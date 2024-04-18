@@ -36,7 +36,7 @@ public class CertificationNumberController {
     @PostMapping("/email")
     public ResponseEntity<CertificationNumberResponse> issueCertificationNumber(@RequestBody EmailCertificationRequest request) throws NoSuchAlgorithmException {
 
-        return ResponseEntity.ok().body(certificationNumberIssueService.issueCertificationNumber(request.getEmail()));
+        return ResponseEntity.ok().body(certificationNumberIssueService.issueCertificationNumber(request.getUserEmail()));
     }
 
     /**
