@@ -32,11 +32,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public LoginTokenResponse issue(User user) {
 
-        String accessToken = JwtTokenUtil.createToken(user.getUserId(), user.getUserAuth(),
+        String accessToken = JwtTokenUtil.createToken(user.getUserId(), user.getRoles(),
                 jwtProperties.getAccessTokenExpirationTime());
 
         String refreshToken = JwtTokenUtil.createToken(user.getUserId(),
-                user.getUserAuth(), jwtProperties.getRefreshTokenExpirationTime());
+                user.getRoles(), jwtProperties.getRefreshTokenExpirationTime());
 
         refreshTokenRepository.save(new RefreshToken(user.getUserId(), refreshToken));
 
@@ -69,7 +69,7 @@ public class TokenServiceImpl implements TokenService {
         User user = userService.getUser(userId);
 
         ReissueResponse response = new ReissueResponse();
-        response.setAccessToken(JwtTokenUtil.createToken(userId, user.getUserAuth(), jwtProperties.getAccessTokenExpirationTime()));
+        response.setAccessToken(JwtTokenUtil.createToken(userId, user.getRoles(), jwtProperties.getAccessTokenExpirationTime()));
         response.setTokenType("Bearer");
 
         return response;

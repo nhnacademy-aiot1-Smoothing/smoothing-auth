@@ -12,9 +12,9 @@ public interface PasswordEncodingService {
 
     /**
      *
-     * @param originalPassword 암호화 되기 전 비밀번호
+     * @param request 암호화 되기 전 비밀번호를 담고 있는 객체
      * @return 암호화 된 비밀번호
      */
 
-    PasswordEncodingResponse encodePassword(PasswordEncodingRequest originalPassword);
+    PasswordEncodingResponse encodePassword(PasswordEncodingRequest request);
 }

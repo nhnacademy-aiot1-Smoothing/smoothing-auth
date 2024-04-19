@@ -18,13 +18,13 @@ import java.util.List;
 public class SimpleUserResponse {
 
     private InnerUser user;
-    private List<String> auths;
+    private List<String> roles;
 
     /**
      * entity로 변환
      */
     public User toEntity() {
-        return new User(user.userId, user.userPassword, auths);
+        return new User(user.userId, user.userPassword, roles);
     }
 
     /**

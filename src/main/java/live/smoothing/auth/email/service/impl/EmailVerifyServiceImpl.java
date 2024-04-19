@@ -28,7 +28,7 @@ public class EmailVerifyServiceImpl implements EmailVerifyService {
             throw new CertificationNumberNotValid();
         }
 
-        certificationNumberService.removeCertificationNumber(request.getEmail());
+        certificationNumberService.removeCertificationNumber(request.getUserEmail());
 
         return true;
     }
@@ -39,9 +39,9 @@ public class EmailVerifyServiceImpl implements EmailVerifyService {
     @Override
     public boolean isEmailAndCertificationNumberExists(VerificationRequest request) {
 
-        boolean emailExists = isEmailExists(request.getEmail());
+        boolean emailExists = isEmailExists(request.getUserEmail());
 
-        return (emailExists && certificationNumberService.getCertificationNumber(request.getEmail()).equals(request.getCertificationNumber()));
+        return (emailExists && certificationNumberService.getCertificationNumber(request.getUserEmail()).equals(request.getCertificationNumber()));
     }
 
     /**

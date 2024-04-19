@@ -83,13 +83,13 @@ public class AuthController {
     /**
      * 주어진 원본 비밀번호를 암호화하여 반환하는 기능
      *
-     * @param originalPassword PasswordDto - 암호화할 원본 비밀번호
+     * @param request 암호화할 원본 비밀번호를 담고 있는 객체
      * @return 암호화된 비밀번호를 담은 응답 DTO
      * @author 김지윤
      */
     @PostMapping("/encode")
-    public ResponseEntity<PasswordEncodingResponse> encodePassword(@RequestBody PasswordEncodingRequest originalPassword) {
+    public ResponseEntity<PasswordEncodingResponse> encodePassword(@RequestBody PasswordEncodingRequest request) {
 
-        return new ResponseEntity<>(passwordEncodingService.encodePassword(originalPassword), HttpStatus.OK);
+        return new ResponseEntity<>(passwordEncodingService.encodePassword(request), HttpStatus.OK);
     }
 }

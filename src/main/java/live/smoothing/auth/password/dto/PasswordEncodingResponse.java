@@ -11,10 +11,8 @@ import lombok.Setter;
  * @author 김지윤
  */
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class PasswordEncodingResponse {
 
-    private String password;
+    private String encodedPassword;
 }

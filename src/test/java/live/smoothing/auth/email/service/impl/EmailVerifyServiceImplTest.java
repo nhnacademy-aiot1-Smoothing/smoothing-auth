@@ -28,8 +28,8 @@ class EmailVerifyServiceImplTest {
 
         VerificationRequest request = new VerificationRequest("test@gmail.com", "123456");
 
-        when(certificationNumberService.getCertificationNumber(request.getEmail())).thenReturn(request.getCertificationNumber());
-        when(certificationNumberService.hasKey(request.getEmail())).thenReturn(true);
+        when(certificationNumberService.getCertificationNumber(request.getUserEmail())).thenReturn(request.getCertificationNumber());
+        when(certificationNumberService.hasKey(request.getUserEmail())).thenReturn(true);
 
         boolean isVerified = emailVerifyService.isVerifiedEmail(request);
 
@@ -41,8 +41,8 @@ class EmailVerifyServiceImplTest {
 
         VerificationRequest request = new VerificationRequest("test@gmail.com", "123456");
 
-        when(certificationNumberService.getCertificationNumber(request.getEmail())).thenReturn("999999");
-        when(certificationNumberService.hasKey(request.getEmail())).thenReturn(true);
+        when(certificationNumberService.getCertificationNumber(request.getUserEmail())).thenReturn("999999");
+        when(certificationNumberService.hasKey(request.getUserEmail())).thenReturn(true);
 
         assertThrows(CertificationNumberNotValid.class, () -> {
             emailVerifyService.isVerifiedEmail(request);

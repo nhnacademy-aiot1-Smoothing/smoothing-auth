@@ -22,9 +22,9 @@ public class PasswordEncodingServiceImpl implements PasswordEncodingService {
      * {@inheritDoc}
      */
     @Override
-    public PasswordEncodingResponse encodePassword(PasswordEncodingRequest originalPassword) {
+    public PasswordEncodingResponse encodePassword(PasswordEncodingRequest request) {
 
-        String encodedPassword = passwordEncoder.encode(originalPassword.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getOriginalPassword());
 
         return new PasswordEncodingResponse(encodedPassword);
     }
