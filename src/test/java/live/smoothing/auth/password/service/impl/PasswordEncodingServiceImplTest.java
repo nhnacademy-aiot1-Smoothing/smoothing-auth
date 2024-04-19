@@ -30,6 +30,6 @@ class PasswordEncodingServiceImplTest {
         PasswordEncodingRequest originalPasswordDto = new PasswordEncodingRequest(originalPassword);
         PasswordEncodingResponse encodedPasswordDto = passwordEncodingService.encodePassword(originalPasswordDto);
 
-        assertEquals(encodedPassword, encodedPasswordDto.getPassword());
+        assertEquals(encodedPassword, encodedPasswordDto.getEncodedPassword());
     }
 }

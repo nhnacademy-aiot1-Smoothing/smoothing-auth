@@ -98,7 +98,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(originalPassword)))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.password").value(encodedPassword.getPassword()));
+                .andExpect(jsonPath("$.encodedPassword").value(encodedPassword.getEncodedPassword()));
     }
 
     @Test

@@ -8,7 +8,8 @@ import lombok.*;
  * @author 김지윤
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 public class PasswordEncodingRequest {
 
     private String originalPassword;

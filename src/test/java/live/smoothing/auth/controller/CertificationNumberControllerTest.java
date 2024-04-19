@@ -43,7 +43,7 @@ class CertificationNumberControllerTest {
         EmailCertificationRequest request = new EmailCertificationRequest(email);
         CertificationNumberResponse response = new CertificationNumberResponse(certificationNumber);
 
-        when(certificationNumberIssueService.issueCertificationNumber(request.getEmail())).thenReturn(response);
+        when(certificationNumberIssueService.issueCertificationNumber(request.getUserEmail())).thenReturn(response);
 
         mockMvc.perform(post("/api/auth/email")
                         .contentType(MediaType.APPLICATION_JSON)
