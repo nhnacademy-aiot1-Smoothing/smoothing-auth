@@ -1,5 +1,6 @@
 package live.smoothing.auth.token.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import live.smoothing.auth.token.entity.RefreshToken;
 import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
@@ -8,16 +9,21 @@ import live.smoothing.auth.token.exception.RefreshTokenNotExist;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
 import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.token.util.JwtTokenUtil;
+import live.smoothing.auth.token.util.JwtUtil;
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 사용자의 로그인, 로그아웃, 토큰 재발급 기능을 제공하는 서비스 클래스의 구현체
  *
  * @author 김지윤, 우혜승, 하지현
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service("refreshTokenService")
 public class TokenServiceImpl implements TokenService {
@@ -39,6 +45,7 @@ public class TokenServiceImpl implements TokenService {
                 user.getRoles(), jwtProperties.getRefreshTokenExpirationTime());
 
         refreshTokenRepository.save(new RefreshToken(user.getUserId(), refreshToken));
+        deleteExpiredToken(user.getUserId());
 
         return new LoginTokenResponse(accessToken, refreshToken, jwtProperties.getTokenPrefix());
     }
@@ -54,6 +61,7 @@ public class TokenServiceImpl implements TokenService {
         }
 
         refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
+        deleteExpiredToken(userId);
     }
 
     /**
@@ -74,4 +82,20 @@ public class TokenServiceImpl implements TokenService {
 
         return response;
     }
+
+    @Override
+    public void deleteExpiredToken(String userId) {
+        List<String> tokens = refreshTokenRepository.findAllByUserId(userId);
+        for (String token : tokens) {
+            try {
+                if (JwtUtil.requireReissue(token)) {
+                    refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, token);
+                }
+            } catch (JsonProcessingException e) {
+                log.error("토큰 파싱 중 오류 발생", e);
+            }
+
+        }
+    }
+
 }

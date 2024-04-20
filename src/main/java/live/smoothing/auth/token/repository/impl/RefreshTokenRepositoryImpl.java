@@ -6,6 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * redis에서 refreshToken을 관리하는 클래스의 구현체
  *
@@ -42,6 +48,20 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     public void deleteByUserIdAndRefreshToken(String userId, String refreshToken) {
 
         redisTemplate.opsForSet().remove(userId, refreshToken);
+    }
+
+    @Override
+    public List<String> findAllByUserId(String userId) {
+
+        List<String> result;
+
+        Set<String> members = redisTemplate.opsForSet().members(userId);
+        if (Objects.isNull(members)) {
+            result = new ArrayList<>();
+        } else {
+            result = new ArrayList<>(members);
+        }
+        return result;
     }
 
 }
