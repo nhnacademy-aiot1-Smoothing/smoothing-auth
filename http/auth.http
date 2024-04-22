@@ -2,8 +2,8 @@ POST http://localhost:8002/api/auth/login
 Content-Type: application/json
 
 {
-  "userId": "test",
-  "userPassword": "1234"
+  "userId": "admin",
+  "userPassword": "12345678901"
 }
 
 ###
