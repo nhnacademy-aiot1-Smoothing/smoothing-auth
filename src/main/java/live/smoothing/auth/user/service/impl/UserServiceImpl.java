@@ -1,6 +1,7 @@
 package live.smoothing.auth.user.service.impl;
 
 import feign.FeignException;
+import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.user.adapter.UserAdapter;
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.dto.LoginRequest;

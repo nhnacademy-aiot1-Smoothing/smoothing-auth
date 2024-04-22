@@ -38,4 +38,6 @@ public interface TokenService {
      * @author 하지현
      */
     ReissueResponse reissue(String userId, String refreshToken);
+
+    void deleteExpiredToken(String userId);
 }

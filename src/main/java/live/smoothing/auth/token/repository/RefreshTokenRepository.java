@@ -2,6 +2,8 @@ package live.smoothing.auth.token.repository;
 
 import live.smoothing.auth.token.entity.RefreshToken;
 
+import java.util.List;
+
 /**
  * redis에서 refreshToken을 관리하는 클래스
  *
@@ -32,4 +34,6 @@ public interface RefreshTokenRepository {
      * @param refreshToken refreshToken
      */
     void deleteByUserIdAndRefreshToken(String userId, String refreshToken);
+
+    List<String> findAllByUserId(String userId);
 }
