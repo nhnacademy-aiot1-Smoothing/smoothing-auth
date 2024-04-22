@@ -2,6 +2,8 @@ package live.smoothing.auth.token.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import live.smoothing.auth.token.entity.RefreshToken;
+import live.smoothing.auth.token.exception.TokenExpireException;
+import live.smoothing.auth.token.exception.TokenParseException;
 import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
@@ -69,6 +71,15 @@ public class TokenServiceImpl implements TokenService {
      */
     @Override
     public ReissueResponse reissue(String userId, String refreshToken) {
+
+        try {
+            if(JwtUtil.requireReissue(refreshToken)){
+                refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
+                throw new TokenExpireException();
+            }
+        } catch (JsonProcessingException e) {
+            throw new TokenParseException();
+        }
 
         if (!refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)) {
             throw new RefreshTokenNotExist();
