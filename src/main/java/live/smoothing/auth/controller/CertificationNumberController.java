@@ -19,7 +19,6 @@ import java.security.NoSuchAlgorithmException;
  * @author 김지윤
  */
 @RestController
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class CertificationNumberController {
