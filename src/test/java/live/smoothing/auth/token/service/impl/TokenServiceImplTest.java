@@ -41,7 +41,7 @@ class TokenServiceImplTest {
 
     private final String userId = "test";
 
-    private final String refreshToken = "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiJhZG1pbiIsInJvbGVzIjpbXSwiaWF0IjoxNzEzNzUyMTA3LCJleHAiOjE3MTQwMTEzMDd9.URw4pfw-8D5O9CdUfKC4_rkHpcuury6SRUzHS8cwclJftULW-h-Wc8ebH-v4onxP";
+    private final String refreshToken = "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiJ0ZXN0Iiwicm9sZXMiOltdLCJpYXQiOjE3MTUyNDM3MDIsImV4cCI6MTcxNTUwMjkwMn0.PSbJOBUTTPE-eWWgS2oaWC0UDsoaJyfQg1r72c8vs7dTDKo_aBs1g-u2W0_-PoBq";
 
     private final User user = new User(userId, "1234", List.of("ROLE_TEST"));
 

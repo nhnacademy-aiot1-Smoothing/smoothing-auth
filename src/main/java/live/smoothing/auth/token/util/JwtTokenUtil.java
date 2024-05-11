@@ -47,7 +47,7 @@ public class JwtTokenUtil {
     public static String createToken(String userId, List<String> roles, Integer expireIn) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, expireIn * 60);
+        calendar.add(Calendar.SECOND, expireIn*60);
         Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
         return Jwts.builder()
