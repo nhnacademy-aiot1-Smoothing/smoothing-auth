@@ -6,6 +6,7 @@ import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
+import live.smoothing.auth.token.repository.TempRefreshTokenRepository;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.service.UserService;
@@ -34,6 +35,9 @@ class TokenServiceImplTest {
     private RefreshTokenRepository refreshTokenRepository;
 
     @Mock
+    private TempRefreshTokenRepository tempRefreshTokenRepository;
+
+    @Mock
     private UserService userService;
 
     @InjectMocks
@@ -58,6 +62,7 @@ class TokenServiceImplTest {
 
         when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(true);
         when(userService.getUser(userId)).thenReturn(user);
+        when(tempRefreshTokenRepository.lock(refreshToken)).thenReturn(true);
 
         ReissueResponse response = tokenService.reissue(userId, refreshToken);
 
@@ -79,6 +84,7 @@ class TokenServiceImplTest {
     void reissue_notExistByUserIdAndRefreshToken() {
 
         when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(false);
+        when(tempRefreshTokenRepository.lock(refreshToken)).thenReturn(true);
 
         Assertions.assertThrows(RuntimeException.class, () -> {
             tokenService.reissue(userId, refreshToken);
