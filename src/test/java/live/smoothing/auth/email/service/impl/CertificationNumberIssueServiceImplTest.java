@@ -1,6 +1,5 @@
 package live.smoothing.auth.email.service.impl;
 
-import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.service.CertificationNumberService;
 import live.smoothing.auth.email.util.CertificationNumberUtil;
 import live.smoothing.auth.rabbitmq.service.MessageProducerService;
@@ -12,8 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.security.NoSuchAlgorithmException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CertificationNumberIssueServiceImplTest {
@@ -38,8 +36,9 @@ class CertificationNumberIssueServiceImplTest {
 
         when(certificationNumberUtil.createCertificationNumber()).thenReturn(certificationNumber);
 
-        CertificationNumberResponse response = certificationNumberIssueService.issueCertificationNumber(email);
+       certificationNumberIssueService.issueCertificationNumber(email);
 
-        assertEquals(certificationNumber, response.getCertificationNumber());
+        verify(certificationNumberService, times(1)).saveCertificationNumber(eq(email), anyString());
+
     }
 }

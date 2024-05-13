@@ -1,6 +1,7 @@
 package live.smoothing.auth.email.service;
 
 import live.smoothing.auth.email.dto.CertificationNumberResponse;
+import live.smoothing.auth.email.dto.MessageResponse;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -16,5 +17,5 @@ public interface CertificationNumberIssueService {
      * @param email 사용자의 email
      * @return 발급된 인증번호
      */
-    CertificationNumberResponse issueCertificationNumber(String email) throws NoSuchAlgorithmException;
+    void issueCertificationNumber(String email) throws NoSuchAlgorithmException;
 }

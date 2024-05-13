@@ -3,6 +3,7 @@ package live.smoothing.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.dto.EmailCertificationRequest;
+import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.dto.VerificationRequest;
 import live.smoothing.auth.email.service.CertificationNumberIssueService;
 import live.smoothing.auth.email.service.EmailVerifyService;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -41,15 +43,15 @@ class CertificationNumberControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         EmailCertificationRequest request = new EmailCertificationRequest(email);
-        CertificationNumberResponse response = new CertificationNumberResponse(certificationNumber);
+        MessageResponse response = new MessageResponse("인증번호가 발급되었습니다.");
 
-        when(certificationNumberIssueService.issueCertificationNumber(request.getUserEmail())).thenReturn(response);
+        doNothing().when(certificationNumberIssueService).issueCertificationNumber(email);
 
         mockMvc.perform(post("/api/auth/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(content().bytes(objectMapper.writeValueAsBytes(response)));
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
 
     }
 
@@ -65,6 +67,6 @@ class CertificationNumberControllerTest {
         mockMvc.perform(post("/api/auth/email/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().is4xxClientError());
     }
 }

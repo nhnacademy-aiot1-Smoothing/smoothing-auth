@@ -1,6 +1,7 @@
 package live.smoothing.auth.email.service.impl;
 
 import live.smoothing.auth.email.dto.CertificationNumberResponse;
+import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.service.CertificationNumberIssueService;
 import live.smoothing.auth.email.service.CertificationNumberService;
 import live.smoothing.auth.email.util.CertificationNumberUtil;
@@ -30,7 +31,7 @@ public class CertificationNumberIssueServiceImpl implements CertificationNumberI
      * {@inheritDoc}
      */
     @Override
-    public CertificationNumberResponse issueCertificationNumber(String email) throws NoSuchAlgorithmException {
+    public void issueCertificationNumber(String email) throws NoSuchAlgorithmException {
 
         String certificationNumber = certificationNumberUtil.createCertificationNumber();
         certificationNumberService.saveCertificationNumber(email, certificationNumber);
@@ -41,7 +42,5 @@ public class CertificationNumberIssueServiceImpl implements CertificationNumberI
         MessageDTO messageDTO = new MessageDTO(email, title, eventMessage);
 
         messageProducerService.sendMessage(messageDTO);
-
-        return new CertificationNumberResponse(certificationNumber);
     }
 }

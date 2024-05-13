@@ -2,15 +2,14 @@ package live.smoothing.auth.controller;
 
 import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.dto.EmailCertificationRequest;
+import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.dto.VerificationRequest;
 import live.smoothing.auth.email.service.CertificationNumberIssueService;
 import live.smoothing.auth.email.service.EmailVerifyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -34,9 +33,11 @@ public class CertificationNumberController {
      * @return 인증번호를 담은 DTO
      */
     @PostMapping("/email")
-    public ResponseEntity<CertificationNumberResponse> issueCertificationNumber(@RequestBody EmailCertificationRequest request) throws NoSuchAlgorithmException {
+    public ResponseEntity<MessageResponse> issueCertificationNumber(@RequestBody EmailCertificationRequest request) throws NoSuchAlgorithmException {
 
-        return ResponseEntity.ok().body(certificationNumberIssueService.issueCertificationNumber(request.getUserEmail()));
+        certificationNumberIssueService.issueCertificationNumber(request.getUserEmail());
+
+        return ResponseEntity.ok().body(new MessageResponse("인증번호가 발급되었습니다."));
     }
 
     /**
@@ -46,8 +47,12 @@ public class CertificationNumberController {
      * @return 인증완료되면 true 실패하면 false
      */
     @PostMapping("/email/verify")
-    public ResponseEntity<Boolean> verifyEmail(@RequestBody VerificationRequest request) {
+    public ResponseEntity<MessageResponse> verifyEmail(@RequestBody VerificationRequest request) {
 
-        return ResponseEntity.ok().body(emailVerifyService.isVerifiedEmail(request));
+        if (emailVerifyService.isVerifiedEmail(request)) {
+            return ResponseEntity.ok().body(new MessageResponse("인증번호가 확인되었습니다."));
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("인증번호를 다시 확인해주세요"));
     }
 }
