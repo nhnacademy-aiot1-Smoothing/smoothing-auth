@@ -1,5 +1,6 @@
 package live.smoothing.auth.config;
 
+import live.smoothing.auth.token.repository.TempRefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -23,6 +25,9 @@ public class RedisConfig {
     private final RedisProperties redisProperties;
     @Value("${redis.dbIndex}")
     private Integer dbIndex;
+
+    @Value("${redis.temp_refresh_token_dbIndex}")
+    private Integer tempRefreshTokenDbIndex;
 
     /**
      * Redis Connection 설정하는 Bean
@@ -62,6 +67,20 @@ public class RedisConfig {
         return factory;
     }
 
+    @Bean
+    public RedisConnectionFactory tempRefreshTokenConnectionFactory() {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
+        redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
+        redisStandaloneConfiguration.setDatabase(tempRefreshTokenDbIndex);
+
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration);
+        factory.afterPropertiesSet();
+
+        return factory;
+    }
+
     /**
      * Redis에 key, value 등과 관련된 연산을 하기 위해 설정하는 Bean
      * Redis의 key와 value를 다룰 수 있음
@@ -91,6 +110,16 @@ public class RedisConfig {
 
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(mailRedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        return redisTemplate;
+    }
+
+    @Bean("tempRefreshTokenRedisTemplate")
+    public StringRedisTemplate tempRefreshTokenRedisTemplate() {
+
+        StringRedisTemplate redisTemplate = new StringRedisTemplate();
+        redisTemplate.setConnectionFactory(tempRefreshTokenConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         return redisTemplate;

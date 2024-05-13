@@ -2,6 +2,7 @@ package live.smoothing.auth.token.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import live.smoothing.auth.token.entity.RefreshToken;
+import live.smoothing.auth.token.exception.RefreshAlreadyIssuingException;
 import live.smoothing.auth.token.exception.TokenExpireException;
 import live.smoothing.auth.token.exception.TokenParseException;
 import live.smoothing.auth.token.properties.JwtProperties;
@@ -9,6 +10,7 @@ import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
 import live.smoothing.auth.token.exception.RefreshTokenNotExist;
 import live.smoothing.auth.token.repository.RefreshTokenRepository;
+import live.smoothing.auth.token.repository.TempRefreshTokenRepository;
 import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.token.util.JwtTokenUtil;
 import live.smoothing.auth.token.util.JwtUtil;
@@ -30,6 +32,7 @@ import java.util.List;
 @Service("refreshTokenService")
 public class TokenServiceImpl implements TokenService {
 
+    private final TempRefreshTokenRepository tempRefreshTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
     private final UserService userService;
@@ -72,6 +75,10 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public ReissueResponse reissue(String userId, String refreshToken) {
 
+        if(!tempRefreshTokenRepository.lock(refreshToken)){
+            throw new RefreshAlreadyIssuingException();
+        }
+
         try {
             if(JwtUtil.requireReissue(refreshToken)){
                 refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
@@ -90,7 +97,6 @@ public class TokenServiceImpl implements TokenService {
         ReissueResponse response = new ReissueResponse();
         response.setAccessToken(JwtTokenUtil.createToken(userId, user.getRoles(), jwtProperties.getAccessTokenExpirationTime()));
         response.setTokenType("Bearer");
-
         return response;
     }
 
