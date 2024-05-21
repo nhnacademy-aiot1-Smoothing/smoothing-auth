@@ -3,6 +3,8 @@ package live.smoothing.auth.token.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import live.smoothing.auth.token.exception.RefreshAlreadyIssuingException;
+import live.smoothing.auth.token.exception.TokenExpireException;
+import live.smoothing.auth.token.exception.TokenParseException;
 import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
@@ -97,6 +99,27 @@ class TokenServiceImplTest {
     }
 
     @Test
+    void reissue_TokenParseException() throws IOException {
+
+        String errorToken = "aGFoYWhh.aGFoYWhh";
+        when(tempRefreshTokenRepository.lock(errorToken)).thenReturn(true);
+
+        Assertions.assertThrows(TokenParseException.class, () -> {
+            tokenService.reissue(userId, errorToken);
+        });
+    }
+
+    @Test
+    void reissue_TokenExpireException() {
+        refreshToken = JwtTokenUtil.createToken(userId, List.of("ROLE_TEST"), -1000);
+        System.out.println(refreshToken);
+        when(tempRefreshTokenRepository.lock(refreshToken)).thenReturn(true);
+
+        assertThrows(TokenExpireException.class, () -> tokenService.reissue(userId, refreshToken));
+        verify(refreshTokenRepository).deleteByUserIdAndRefreshToken(userId, refreshToken);
+    }
+
+    @Test
     void reissue_notExistByUserIdAndRefreshToken() {
 
         when(refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)).thenReturn(false);
@@ -141,5 +164,24 @@ class TokenServiceImplTest {
         JsonNode jsonNode = objectMapper.readTree(Base64.getDecoder().decode(output.getAccessToken().split("\\.")[1]));
 
         assertEquals(input.getUserId(), jsonNode.get("userId").asText());
+    }
+
+    @Test
+    void deleteExpiredToken() {
+        refreshToken = JwtTokenUtil.createToken(userId, List.of("ROLE_TEST"), -1000);
+        List<String> tokens = List.of(refreshToken);
+        when(refreshTokenRepository.findAllByUserId(userId)).thenReturn(tokens);
+
+        tokenService.deleteExpiredToken(userId);
+
+        verify(refreshTokenRepository).deleteByUserIdAndRefreshToken(userId, refreshToken);
+    }
+
+    @Test
+    void deleteExpiredToken_JsonParseError() {
+        List<String> tokens = List.of("aGFoYWhh.aGFoYWhh");
+        when(refreshTokenRepository.findAllByUserId(userId)).thenReturn(tokens);
+
+        assertThrows(TokenParseException.class, () -> tokenService.deleteExpiredToken(userId));
     }
 }

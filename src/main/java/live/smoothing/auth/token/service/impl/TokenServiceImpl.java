@@ -75,17 +75,21 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public ReissueResponse reissue(String userId, String refreshToken) {
 
-        if(!tempRefreshTokenRepository.lock(refreshToken)){
+        if (!tempRefreshTokenRepository.lock(refreshToken)) {
             throw new RefreshAlreadyIssuingException();
         }
 
         try {
-            if(JwtUtil.requireReissue(refreshToken)){
+            if (JwtUtil.requireReissue(refreshToken)) {
                 refreshTokenRepository.deleteByUserIdAndRefreshToken(userId, refreshToken);
                 throw new TokenExpireException();
             }
         } catch (JsonProcessingException e) {
+            log.error("토큰 파싱 중 오류 발생", e);
             throw new TokenParseException();
+        } catch (TokenExpireException e) {
+            log.error("토큰 만료", e);
+            throw new TokenExpireException();
         }
 
         if (!refreshTokenRepository.existByUserIdAndRefreshToken(userId, refreshToken)) {
@@ -110,6 +114,7 @@ public class TokenServiceImpl implements TokenService {
                 }
             } catch (JsonProcessingException e) {
                 log.error("토큰 파싱 중 오류 발생", e);
+                throw new TokenParseException();
             }
 
         }
