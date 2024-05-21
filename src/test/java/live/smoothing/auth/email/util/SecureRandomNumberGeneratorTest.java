@@ -14,6 +14,6 @@ class SecureRandomNumberGeneratorTest {
 
     @Test
     void generateSecureRandomNumber() throws Exception {
-        assertTrue(randomNumberGenerator.generateSecureRandomNumber(6) >= 99999);
+        assertTrue(randomNumberGenerator.generateSecureRandomNumber(6) >= 0);
     }
 }

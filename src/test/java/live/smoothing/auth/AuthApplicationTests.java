@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SmoothingApplicationTest {
+class AuthApplicationTests {
 
     @Test
-    void main() {
-        SmoothingApplication.main(new String[]{});
+    void contextLoads() {
+        AuthApplication.main(new String[] {});
     }
 }
