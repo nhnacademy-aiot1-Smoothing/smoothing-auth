@@ -2,6 +2,7 @@ package live.smoothing.auth.token.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import live.smoothing.auth.token.exception.RefreshAlreadyIssuingException;
 import live.smoothing.auth.token.properties.JwtProperties;
 import live.smoothing.auth.token.dto.LoginTokenResponse;
 import live.smoothing.auth.token.dto.ReissueResponse;
@@ -12,6 +13,7 @@ import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,7 +47,7 @@ class TokenServiceImplTest {
 
     private final String userId = "test";
 
-    private final String refreshToken = "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiJ0ZXN0Iiwicm9sZXMiOltdLCJpYXQiOjE3MTUyNDM3MDIsImV4cCI6MTcxNTUwMjkwMn0.PSbJOBUTTPE-eWWgS2oaWC0UDsoaJyfQg1r72c8vs7dTDKo_aBs1g-u2W0_-PoBq";
+    private String refreshToken;
 
     private final User user = new User(userId, "1234", List.of("ROLE_TEST"));
 
@@ -55,6 +57,20 @@ class TokenServiceImplTest {
         JwtProperties jwtProperties = new JwtProperties();
         jwtProperties.setSecret("thisistestkeythisissecretkeythisisfortestbeforeall");
         new JwtTokenUtil().setSecret(jwtProperties);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        refreshToken = JwtTokenUtil.createToken(userId, List.of("ROLE_TEST"), 1000);
+    }
+
+    @Test
+    void reissueAlreadyIssuingException() {
+        when(tempRefreshTokenRepository.lock(refreshToken)).thenReturn(false);
+
+        assertThrows(RefreshAlreadyIssuingException.class, () -> {
+            tokenService.reissue(userId, refreshToken);
+        });
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -26,7 +27,9 @@ class EmailVerifyServiceImplTest {
     @Test
     void isVerifiedEmail() {
 
-        VerificationRequest request = new VerificationRequest("test@gmail.com", "123456");
+        VerificationRequest request = new VerificationRequest();
+        ReflectionTestUtils.setField(request, "userEmail", "testEmail");
+        ReflectionTestUtils.setField(request, "certificationNumber", "123456");
 
         when(certificationNumberService.getCertificationNumber(request.getUserEmail())).thenReturn(request.getCertificationNumber());
         when(certificationNumberService.hasKey(request.getUserEmail())).thenReturn(true);
@@ -39,7 +42,9 @@ class EmailVerifyServiceImplTest {
     @Test
     void isNotVerifiedEmail() {
 
-        VerificationRequest request = new VerificationRequest("test@gmail.com", "123456");
+        VerificationRequest request = new VerificationRequest();
+        ReflectionTestUtils.setField(request, "userEmail", "testEmail");
+        ReflectionTestUtils.setField(request, "certificationNumber", "123456");
 
         when(certificationNumberService.getCertificationNumber(request.getUserEmail())).thenReturn("999999");
         when(certificationNumberService.hasKey(request.getUserEmail())).thenReturn(true);

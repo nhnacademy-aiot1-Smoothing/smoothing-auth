@@ -8,9 +8,6 @@ import lombok.*;
  * @author 김지윤
  */
 @Getter
-@Setter
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
 

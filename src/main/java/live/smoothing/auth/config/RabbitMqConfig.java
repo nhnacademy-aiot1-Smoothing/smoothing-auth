@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author 김지윤
  */
-@Getter
 @Configuration
 @RequiredArgsConstructor
 public class RabbitMqConfig {

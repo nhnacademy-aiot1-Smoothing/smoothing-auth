@@ -1,7 +1,6 @@
 package live.smoothing.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.dto.EmailCertificationRequest;
 import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.dto.VerificationRequest;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -56,17 +56,31 @@ class CertificationNumberControllerTest {
     }
 
     @Test
-    void verifyEmail() throws Exception {
+    void verifyEmail_fail() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        VerificationRequest request = new VerificationRequest(email, certificationNumber);
+        VerificationRequest request = new VerificationRequest();
 
-        when(emailVerifyService.isVerifiedEmail(request)).thenReturn(true);
+        when(emailVerifyService.isVerifiedEmail(any(VerificationRequest.class))).thenReturn(false);
 
         mockMvc.perform(post("/api/auth/email/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void verifyEmail_success() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        VerificationRequest request = new VerificationRequest();
+
+        when(emailVerifyService.isVerifiedEmail(any(VerificationRequest.class))).thenReturn(true);
+
+        mockMvc.perform(post("/api/auth/email/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
     }
 }

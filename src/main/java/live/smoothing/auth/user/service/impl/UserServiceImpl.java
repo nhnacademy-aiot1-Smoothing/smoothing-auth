@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -48,15 +49,16 @@ public class UserServiceImpl implements UserService {
         ResponseEntity<SimpleUserResponse> userResponse;
         try {
             userResponse = userAdapter.getSimpleUser(userId);
-        } catch (Exception e) {
-            if(e instanceof FeignException){
-                System.out.println(((FeignException) e).status());
+        } catch (FeignException e) {
+            if (e.status() == 500) {
+                throw new UserServerError();
             }
-            throw new UserServerError();
-        }
-        if (!userResponse.getStatusCode().is2xxSuccessful()) {
             throw new UserNotFound();
         }
-        return userResponse.getBody().toEntity();
+        try {
+            return Objects.requireNonNull(userResponse.getBody()).toEntity();
+        } catch (NullPointerException e) {
+            throw new UserNotFound();
+        }
     }
 }
