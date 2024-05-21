@@ -3,7 +3,7 @@ package live.smoothing.auth.email.service.impl;
 import live.smoothing.auth.email.service.CertificationNumberIssueService;
 import live.smoothing.auth.email.service.CertificationNumberService;
 import live.smoothing.auth.email.util.CertificationNumberUtil;
-import live.smoothing.auth.rabbitmq.dto.MessageDTO;
+import live.smoothing.auth.rabbitmq.dto.CertificationMessage;
 import live.smoothing.auth.rabbitmq.service.MessageProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,11 +34,8 @@ public class CertificationNumberIssueServiceImpl implements CertificationNumberI
         String certificationNumber = certificationNumberUtil.createCertificationNumber();
         certificationNumberService.saveCertificationNumber(email, certificationNumber);
 
-        String title = "인증번호 안내 입니다.";
-        String eventMessage = "인증번호는 " + certificationNumber + " 입니다.";
+        CertificationMessage certificationMessage = new CertificationMessage(email, certificationNumber);
 
-        MessageDTO messageDTO = new MessageDTO(email, title, eventMessage);
-
-        messageProducerService.sendMessage(messageDTO);
+        messageProducerService.sendMessage(certificationMessage);
     }
 }

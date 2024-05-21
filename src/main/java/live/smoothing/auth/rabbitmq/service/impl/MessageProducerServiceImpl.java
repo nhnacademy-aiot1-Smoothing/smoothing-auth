@@ -1,6 +1,6 @@
 package live.smoothing.auth.rabbitmq.service.impl;
 
-import live.smoothing.auth.rabbitmq.dto.MessageDTO;
+import live.smoothing.auth.rabbitmq.dto.CertificationMessage;
 import live.smoothing.auth.rabbitmq.service.MessageProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +31,8 @@ public class MessageProducerServiceImpl implements MessageProducerService {
      * {@inheritDoc}
      */
     @Override
-    public void sendMessage(MessageDTO messageDTO) {
+    public void sendMessage(CertificationMessage certificationMessage) {
 
-        log.info("message send: {}", messageDTO.toString());
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, messageDTO);
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, certificationMessage);
     }
 }
