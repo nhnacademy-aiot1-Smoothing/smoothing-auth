@@ -20,6 +20,4 @@ public class JwtProperties {
     private Integer accessTokenExpirationTime;
     private Integer refreshTokenExpirationTime;
     private String tokenPrefix;
-    private String headerString;
-    private String loginUrl;
 }

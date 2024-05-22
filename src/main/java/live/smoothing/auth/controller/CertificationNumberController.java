@@ -1,6 +1,5 @@
 package live.smoothing.auth.controller;
 
-import live.smoothing.auth.email.dto.CertificationNumberResponse;
 import live.smoothing.auth.email.dto.EmailCertificationRequest;
 import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.dto.VerificationRequest;

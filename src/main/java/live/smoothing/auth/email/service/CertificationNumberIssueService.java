@@ -1,8 +1,5 @@
 package live.smoothing.auth.email.service;
 
-import live.smoothing.auth.email.dto.CertificationNumberResponse;
-import live.smoothing.auth.email.dto.MessageResponse;
-
 import java.security.NoSuchAlgorithmException;
 
 /**

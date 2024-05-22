@@ -1,7 +1,5 @@
 package live.smoothing.auth.email.service.impl;
 
-import live.smoothing.auth.email.dto.CertificationNumberResponse;
-import live.smoothing.auth.email.dto.MessageResponse;
 import live.smoothing.auth.email.service.CertificationNumberIssueService;
 import live.smoothing.auth.email.service.CertificationNumberService;
 import live.smoothing.auth.email.util.CertificationNumberUtil;

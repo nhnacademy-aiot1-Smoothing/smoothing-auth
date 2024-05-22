@@ -56,7 +56,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         List<String> result;
 
         Set<String> members = redisTemplate.opsForSet().members(userId);
-        if (Objects.isNull(members)) {
+        if (Objects.isNull(members) || members.isEmpty()) {
             result = new ArrayList<>();
         } else {
             result = new ArrayList<>(members);
