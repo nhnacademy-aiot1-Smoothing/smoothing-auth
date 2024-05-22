@@ -55,10 +55,6 @@ public class UserServiceImpl implements UserService {
             }
             throw new UserNotFound();
         }
-        try {
-            return Objects.requireNonNull(userResponse.getBody()).toEntity();
-        } catch (NullPointerException e) {
-            throw new UserNotFound();
-        }
+        return userResponse.getBody().toEntity();
     }
 }

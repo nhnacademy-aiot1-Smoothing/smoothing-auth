@@ -34,37 +34,6 @@ public class JwtUtil {
     }
 
     /**
-     * JWT Token에서 권한을 추출하는 메서드
-     *
-     * @param token 문자열 JWT Token
-     * @return 권한 리스트
-     * @throws JsonProcessingException Json 파싱 중 오류 발생 예외
-     */
-    public static List<String> getRoles(String token) throws JsonProcessingException {
-
-        String payload = token.split("\\.")[1];
-        String payloadJson = new String(Base64.getDecoder().decode(payload));
-        JsonNode jsonNode = OBJECT_MAPPER.readTree(payloadJson);
-        return OBJECT_MAPPER.readValue(jsonNode.get("roles").toString(), new TypeReference<List<String>>() {
-        });
-    }
-
-    /**
-     * Jwt Token에서 유저 아이디를 추출하는 메서드
-     *
-     * @param token 문자열 JWT Token
-     * @return 유저 아이디
-     * @throws JsonProcessingException Json 파싱 중 오류 발생 예외
-     */
-    public static String getUserId(String token) throws JsonProcessingException {
-
-        String payload = token.split("\\.")[1];
-        String payloadJson = new String(Base64.getDecoder().decode(payload));
-        JsonNode jsonNode = OBJECT_MAPPER.readTree(payloadJson);
-        return jsonNode.get("userId").asText();
-    }
-
-    /**
      * 현재 시간과 JWT Token의 만료 시간을 비교하여 재발급 여부를 판단하는 메서드
      *
      * @param token 문자열 JWT Token

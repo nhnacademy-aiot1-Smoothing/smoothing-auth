@@ -1,9 +1,7 @@
 package live.smoothing.auth.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import live.smoothing.auth.user.domain.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -12,29 +10,21 @@ import java.util.List;
  *
  * @author 우혜승
  */
-@Getter
-@Setter
-@NoArgsConstructor
 public class SimpleUserResponse {
 
-    private InnerUser user;
+    @JsonProperty("user")
+    private InnerUserDto user;
+    @JsonProperty("roles")
     private List<String> roles;
 
     /**
      * entity로 변환
      */
     public User toEntity() {
-        return new User(user.userId, user.userPassword, roles);
+        return new User(user.getUserId(), user.getUserPassword(), roles);
     }
 
     /**
      * 사용자 정보를 담는 내부 클래스
      */
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class InnerUser {
-        private String userId;
-        private String userPassword;
-    }
 }
