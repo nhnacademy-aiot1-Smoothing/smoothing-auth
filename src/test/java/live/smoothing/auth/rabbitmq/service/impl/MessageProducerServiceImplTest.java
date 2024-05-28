@@ -1,6 +1,6 @@
 package live.smoothing.auth.rabbitmq.service.impl;
 
-import live.smoothing.auth.rabbitmq.dto.MessageDTO;
+import live.smoothing.auth.rabbitmq.dto.CertificationMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,13 +26,13 @@ class MessageProducerServiceImplTest {
 
     @Test
     void sendMessage() {
-        MessageDTO messageDTO = new MessageDTO("email", "title", "eventMessage");
+        CertificationMessage certificationMessage = new CertificationMessage("email", "12345");
 
         ReflectionTestUtils.setField(messageProducerService, "exchangeName", exchangeName);
         ReflectionTestUtils.setField(messageProducerService, "routingKey", routingKey);
 
-        messageProducerService.sendMessage(messageDTO);
+        messageProducerService.sendMessage(certificationMessage);
 
-        verify(rabbitTemplate).convertAndSend(exchangeName, routingKey, messageDTO);
+        verify(rabbitTemplate).convertAndSend(exchangeName, routingKey, certificationMessage);
     }
 }

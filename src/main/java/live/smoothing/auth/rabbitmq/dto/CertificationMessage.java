@@ -9,9 +9,9 @@ import lombok.*;
  */
 @Getter
 @AllArgsConstructor
-public class MessageDTO {
+public class CertificationMessage {
 
     private String email;
-    private String title;
-    private String eventMessage;
+    private String certificationNumber;
+
 }
