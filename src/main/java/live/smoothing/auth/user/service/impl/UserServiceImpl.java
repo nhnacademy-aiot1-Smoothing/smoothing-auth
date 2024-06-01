@@ -1,6 +1,7 @@
 package live.smoothing.auth.user.service.impl;
 
 import feign.FeignException;
+import live.smoothing.auth.token.service.TokenService;
 import live.smoothing.auth.user.adapter.UserAdapter;
 import live.smoothing.auth.user.domain.User;
 import live.smoothing.auth.user.dto.LoginRequest;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -47,13 +49,10 @@ public class UserServiceImpl implements UserService {
         ResponseEntity<SimpleUserResponse> userResponse;
         try {
             userResponse = userAdapter.getSimpleUser(userId);
-        } catch (Exception e) {
-            if(e instanceof FeignException){
-                System.out.println(((FeignException) e).status());
+        } catch (FeignException e) {
+            if (e.status() == 500) {
+                throw new UserServerError();
             }
-            throw new UserServerError();
-        }
-        if (!userResponse.getStatusCode().is2xxSuccessful()) {
             throw new UserNotFound();
         }
         return userResponse.getBody().toEntity();

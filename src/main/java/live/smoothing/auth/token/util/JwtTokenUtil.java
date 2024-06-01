@@ -6,6 +6,9 @@ import live.smoothing.auth.token.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,13 +47,15 @@ public class JwtTokenUtil {
     public static String createToken(String userId, List<String> roles, Integer expireIn) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, expireIn * 60);
+        calendar.add(Calendar.SECOND, expireIn*60);
+        Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(calendar.getTime())
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(key)
                 .compact();
     }
 }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author 우혜승
  */
 @RestControllerAdvice
-public class ErrorController {
+public class ErrorAdvice {
 
     @ExceptionHandler({CommonException.class})
     public ResponseEntity<ErrorResponse> error(HttpServletRequest request, CommonException e){

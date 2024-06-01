@@ -1,7 +1,9 @@
 package live.smoothing.auth.user.service.impl;
 
+import feign.FeignException;
 import live.smoothing.auth.user.adapter.UserAdapter;
 import live.smoothing.auth.user.domain.User;
+import live.smoothing.auth.user.dto.InnerUserDto;
 import live.smoothing.auth.user.dto.LoginRequest;
 import live.smoothing.auth.user.dto.SimpleUserResponse;
 import live.smoothing.auth.user.exeption.PasswordNotValid;
@@ -14,13 +16,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,8 +75,9 @@ class UserServiceImplTest {
 
     @Test
     void getUser_serverError() {
-
-        when(userAdapter.getSimpleUser(userId)).thenThrow(UserServerError.class);
+        FeignException feignException = Mockito.mock(FeignException.class);
+        when(feignException.status()).thenReturn(500);
+        when(userAdapter.getSimpleUser(userId)).thenThrow(feignException);
 
         assertThrows(UserServerError.class, ()->userService.getUser(userId));
     }
@@ -78,18 +85,28 @@ class UserServiceImplTest {
     @Test
     void getUser_notFound() {
 
-//        Mockito.when(userAdapter.getSimpleUser(userId)).thenReturn(Optional.empty());
-//
-//        assertThrows(UserNotFound.class, ()->userService.getUser(userId));
+        FeignException feignException = Mockito.mock(FeignException.class);
+        when(feignException.status()).thenReturn(404);
+        when(userAdapter.getSimpleUser(userId)).thenThrow(feignException);
+
+        assertThrows(UserNotFound.class, ()->userService.getUser(userId));
     }
 
     @Test
-    void getUser_exist() {
+    void getUser() {
 
-//        SimpleUserResponse userResponse = new SimpleUserResponse();
-//        userResponse.setUser(new SimpleUserResponse.InnerUser());
-//        Mockito.when(userAdapter.getSimpleUser(userId)).thenReturn(Optional.of(userResponse));
-//
-//        assertNotNull(userService.getUser(userId));
+        SimpleUserResponse simpleUserResponse = new SimpleUserResponse();
+        InnerUserDto innerUser = new InnerUserDto();
+        List<String> roles = List.of("ROLE_TEST");
+        ReflectionTestUtils.setField(innerUser, "userId", userId);
+        ReflectionTestUtils.setField(innerUser, "userPassword", userPassword);
+        ReflectionTestUtils.setField(simpleUserResponse, "user", innerUser);
+        ReflectionTestUtils.setField(simpleUserResponse, "roles", roles);
+
+        ResponseEntity<SimpleUserResponse> response = new ResponseEntity<>(simpleUserResponse, null, 200);
+
+        when(userAdapter.getSimpleUser(userId)).thenReturn(response);
+
+        assertEquals(userId, userService.getUser(userId).getUserId());
     }
 }

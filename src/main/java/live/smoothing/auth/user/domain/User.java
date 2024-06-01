@@ -20,5 +20,5 @@ public class User {
 
     private String userId;
     private String userPassword;
-    private List<String> userAuth;
+    private List<String> roles;
 }
