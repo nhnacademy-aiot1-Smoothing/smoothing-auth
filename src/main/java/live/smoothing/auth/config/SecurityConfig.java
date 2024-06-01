@@ -16,15 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
     @Bean
-    @Profile("!dev")
     public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    @Profile("dev")
-    public PasswordEncoder passwordEncoderDev() {
-        return NoOpPasswordEncoder.getInstance();
-    }
 }
