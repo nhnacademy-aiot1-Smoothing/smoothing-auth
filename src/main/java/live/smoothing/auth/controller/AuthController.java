@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 /**
  * JWT 토큰 로그인, 재발급, 로그아웃을 위한 컨트롤러 클래스
  *
@@ -91,5 +93,11 @@ public class AuthController {
     public ResponseEntity<PasswordEncodingResponse> encodePassword(@RequestBody PasswordEncodingRequest request) {
 
         return new ResponseEntity<>(passwordEncodingService.encodePassword(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/oauth")
+    public ResponseEntity<LoginTokenResponse> loginOAuth(@PathParam("userId") String userId) {
+        User user = userService.getUser(userId);
+        return ResponseEntity.ok(tokenService.issue(user));
     }
 }
