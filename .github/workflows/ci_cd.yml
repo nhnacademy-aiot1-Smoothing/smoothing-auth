@@ -55,6 +55,6 @@ jobs:
             sudo docker stop $containers
             sudo docker rm $containers
           else
-            echo "No containers with 'front' found."
+            echo "No containers with 'auth' found."
           fi
-          sudo docker run -d --name front-service --network=smoothing -p 8000:8000 --restart always front
+          sudo docker run -d --name auth-service --network=smoothing -p 8002:8002 --restart always auth
