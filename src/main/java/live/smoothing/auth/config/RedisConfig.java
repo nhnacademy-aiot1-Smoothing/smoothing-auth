@@ -29,6 +29,9 @@ public class RedisConfig {
     @Value("${redis.temp_refresh_token_dbIndex}")
     private Integer tempRefreshTokenDbIndex;
 
+    @Value("${redis.certification_number_dbIndex}")
+    private Integer certificationNumberDbIndex;
+
     /**
      * Redis Connection 설정하는 Bean
      *
@@ -59,7 +62,7 @@ public class RedisConfig {
         redisStandaloneConfiguration.setHostName(redisProperties.getHost());
         redisStandaloneConfiguration.setPort(redisProperties.getPort());
         redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
-        redisStandaloneConfiguration.setDatabase(35);
+        redisStandaloneConfiguration.setDatabase(certificationNumberDbIndex);
 
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         factory.afterPropertiesSet();
