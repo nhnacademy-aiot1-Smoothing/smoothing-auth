@@ -3,7 +3,7 @@ POST http://localhost:8002/api/auth/email
 Content-Type: application/json
 
 {
-  "email" : "cs.smoothing@gmail.com"
+  "userEmail" : "xodysdjssl@naver.com"
 }
 
 ### 인증번호 검증
@@ -11,6 +11,6 @@ POST http://localhost:8002/api/auth/email/verify
 Content-Type: application/json
 
 {
-  "email": "cs.smoothing@gmail.com",
-  "certificationNumber": "599604"
+  "userEmail": "xodysdjssl@naver.com",
+  "certificationNumber": "490483"
 }
